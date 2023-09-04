@@ -1,13 +1,14 @@
 package me.study.getinline.exception;
 
+import lombok.Getter;
 import me.study.getinline.constant.ErrorCode;
-
+@Getter
 public class GeneralException extends RuntimeException{
 
 	private final ErrorCode errorCode;
 
 	public GeneralException() {
-		super();
+		super(ErrorCode.INTERNAL_ERROR.getMessage());
 		this.errorCode = ErrorCode.INTERNAL_ERROR;
 	}
 
