@@ -11,7 +11,7 @@ public enum ErrorCode {
 
 	OK(0, ErrorCategory.NORMAL, "OK"),
 
-	BAD_REQUST(10000, ErrorCategory.CLIENT_SIDE, "bad request"),
+	BAD_REQUEST(10000, ErrorCategory.CLIENT_SIDE, "bad request"),
 	SPRING_BAD_REQUST(10001, ErrorCategory.CLIENT_SIDE, "Spring-detected bad request"),
 
 	INTERNAL_ERROR(20000, ErrorCategory.SERVER_SIDE, "internal error"),
