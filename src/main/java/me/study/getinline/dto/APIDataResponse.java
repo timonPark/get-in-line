@@ -17,7 +17,16 @@ public class APIDataResponse<T> extends APIErrorResponse {
 		this.data = data;
 	}
 
+	protected APIDataResponse(Integer code, T data) {
+		super(true, code, ErrorCode.OK.getMessage());
+		this.data = data;
+	}
+
 	public static <T> APIDataResponse<T> of(T data) {
 		return new APIDataResponse(data);
+	}
+
+	public static <T> APIDataResponse<T> of(Integer code, T data) {
+		return new APIDataResponse(code, data);
 	}
 }

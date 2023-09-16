@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlaceResponseDto {
+public class PlaceDto {
 	private String placeType;
 	private String placeName;
 	private String address;

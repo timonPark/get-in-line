@@ -1,11 +1,12 @@
 package me.study.getinline.controller.api;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.study.getinline.constant.ErrorCode;
 import me.study.getinline.constant.PlaceType;
+import me.study.getinline.dto.PlaceDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,14 @@ import org.springframework.test.web.servlet.MockMvc;
 class APIPlaceControllerTest {
 
 	private final MockMvc mvc;
+	private final ObjectMapper mapper;
 
-	public APIPlaceControllerTest(@Autowired MockMvc mvc) {
+	public APIPlaceControllerTest(
+			@Autowired MockMvc mvc,
+			@Autowired ObjectMapper mapper
+	) {
 		this.mvc = mvc;
+		this.mapper = mapper;
 	}
 
 	@DisplayName("[API][GET] 장소 리스트 조회")
@@ -80,5 +86,33 @@ class APIPlaceControllerTest {
 				.andExpect(jsonPath("$.success").value(true))
 				.andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
 				.andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+	}
+
+	@DisplayName("[API][POST] 장소 생성")
+	@Test
+	void givenPlace_whenCreatingPlace_thenReturnSuccessfulStandardResponse() throws Exception {
+		// given
+		PlaceDto placeResponse = PlaceDto.builder()
+				.placeType(PlaceType.COMMON.name())
+				.placeName("랄라베드민턴장")
+				.address("서울시 강남구 강남대로 1234")
+				.phoneNumber("010-1234-5678")
+				.capacity(30)
+				.memo("신장개업")
+				.build();
+
+		// when & then
+		mvc.perform(
+				post("/api/places")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(placeResponse))
+		)
+				.andExpect(status().isCreated())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.success").value(true))
+				.andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
+				.andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+
 	}
 }

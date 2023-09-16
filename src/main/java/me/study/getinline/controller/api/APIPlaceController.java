@@ -1,11 +1,10 @@
 package me.study.getinline.controller.api;
 
 import java.util.List;
-import me.study.getinline.constant.ErrorCode;
 import me.study.getinline.constant.PlaceType;
 import me.study.getinline.dto.APIDataResponse;
-import me.study.getinline.dto.PlaceRequestDto;
-import me.study.getinline.dto.PlaceResponseDto;
+import me.study.getinline.dto.PlaceDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/places")
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class APIPlaceController {
 
 	@GetMapping("")
-	public APIDataResponse<List<PlaceResponseDto>> places(){
+	public APIDataResponse<List<PlaceDto>> places(){
 		return APIDataResponse.of(
-				List.of(PlaceResponseDto.builder()
+				List.of(PlaceDto.builder()
 						.placeType(PlaceType.COMMON.name())
 						.placeName("랄라베드민턴장")
 						.address("서울시 강남구 강남대로 1234")
@@ -33,11 +33,11 @@ public class APIPlaceController {
 	}
 
 	@GetMapping("/{placeId}")
-	public APIDataResponse<PlaceResponseDto> placeDetail(@PathVariable Integer placeId){
+	public APIDataResponse<PlaceDto> placeDetail(@PathVariable Integer placeId){
 		return
 				APIDataResponse.of(
 						placeId == 1 ?
-								PlaceResponseDto.builder()
+								PlaceDto.builder()
 									.placeType(PlaceType.COMMON.name())
 									.placeName("랄라베드민턴장")
 									.address("서울시 강남구 강남대로 1234")
@@ -49,13 +49,14 @@ public class APIPlaceController {
 				);
 	}
 
+	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("")
-	public String createPlace(@RequestBody PlaceRequestDto placeRequestDto) {
-		return "creat placeId: " + placeRequestDto.getPlaceId();
+	public APIDataResponse<PlaceDto> createPlace(@RequestBody PlaceDto placeDto) {
+		return APIDataResponse.of(placeDto);
 	}
 
 	@PutMapping("/{placeId}")
-	public String updatePlace(@PathVariable Integer placeId, @RequestBody PlaceRequestDto placeRequestDto) {
+	public String updatePlace(@PathVariable Integer placeId, @RequestBody PlaceDto placeDto) {
 		return "update placeId: " + placeId;
 	}
 
